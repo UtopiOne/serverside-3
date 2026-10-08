@@ -3,7 +3,9 @@
 @section('title', 'Welcome')
 
 @section('content')
-    <h1>Welcome to our website!</h1>
-    <p>This is the welcome page.</p>
+    <h1>Our contact info</h1>
+    <p>Email: {{ $contacts['email'] }}</p>
+    <p>Telephone: {{ $contacts['telephone'] }}</p>
+    <p>Address: {{ $contacts['address'] }}</p>
 @endsection
 
