@@ -11,6 +11,10 @@ services:
       DB_DATABASE: /app/storage/database.sqlite
     volumes:
       - laravel_storage:/app/storage
+      - ./app:/app/app:ro
+      - ./routes:/app/routes:ro
+      - ./resources:/app/resources:ro
+      - ./public/articles.json:/app/storage/app/public/articles.json:ro
 
 volumes:
   laravel_storage:
