@@ -15,6 +15,7 @@ services:
       - ./routes:/app/routes:ro
       - ./resources:/app/resources:ro
       - ./public/articles.json:/app/storage/app/public/articles.json:ro
+      - ./public/build:/app/public/build:ro
 
 volumes:
   laravel_storage:
