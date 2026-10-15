@@ -2,13 +2,17 @@
 
 use App\Http\Controllers\MainController;
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Http\Request;
 
 
 Route::get('/', [MainController::class, 'index']);
 
 Route::get('/about', function () {
     return view('about');
+});
+
+Route::get('/gallery', function (Request $request) {
+    return view('gallery', ['image' => $request->query('image', 'full.jpeg')]);
 });
 
 Route::get('/contact', function () {

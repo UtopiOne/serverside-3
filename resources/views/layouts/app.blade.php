@@ -12,15 +12,21 @@
 
 <body class="flex min-h-screen flex-col bg-slate-950 font-sans text-slate-200 antialiased">
     <header class="border-b border-slate-800 bg-slate-900">
+
         <nav class="mx-auto max-w-3xl px-6 py-4" aria-label="Main navigation">
             <ul class="flex gap-6">
-                <li><a class="text-slate-300 hover:text-white focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-slate-400" href="/about">About Us</a></li>
-                <li><a class="text-slate-300 hover:text-white focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-slate-400" href="/contact">Contact</a></li>
+                <li><a class="text-slate-300 hover:text-white focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-slate-400"
+                        href="/">Home Page</a></li>
+                <li><a class="text-slate-300 hover:text-white focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-slate-400"
+                        href="/about">About Us</a></li>
+                <li><a class="text-slate-300 hover:text-white focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-slate-400"
+                        href="/contact">Contact</a></li>
             </ul>
         </nav>
     </header>
 
-    <main class="mx-auto w-full max-w-3xl flex-1 px-6 py-12 leading-relaxed [&_h1]:mb-4 [&_h1]:text-3xl [&_h1]:font-semibold [&_h1]:text-white [&_p]:mb-3">
+    <main
+        class="mx-auto w-full max-w-3xl flex-1 px-6 py-12 leading-relaxed [&_h1]:mb-4 [&_h1]:text-3xl [&_h1]:font-semibold [&_h1]:text-white [&_p]:mb-3">
         @yield('content')
     </main>
 
