@@ -26,7 +26,7 @@
     </header>
 
     <main
-        class="mx-auto w-full max-w-3xl flex-1 px-6 py-12 leading-relaxed [&_h1]:mb-4 [&_h1]:text-3xl [&_h1]:font-semibold [&_h1]:text-white [&_p]:mb-3">
+        class="mx-auto w-full @yield('content-width', 'max-w-3xl') flex-1 px-6 py-12 leading-relaxed [&_h1]:mb-4 [&_h1]:text-3xl [&_h1]:font-semibold [&_h1]:text-white [&_p]:mb-3">
         @yield('content')
     </main>
 
