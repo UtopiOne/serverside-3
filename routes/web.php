@@ -1,12 +1,12 @@
 <?php
 
+use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\MainController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
 
-Route::get('/', [MainController::class, 'index']);
+Route::get('/', [ArticleController::class, 'index']);
 
 Route::get('/about', function () {
     return view('about');
