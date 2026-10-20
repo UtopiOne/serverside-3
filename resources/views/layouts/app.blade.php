@@ -8,6 +8,8 @@
     @vite('resources/css/app.css')
 
     <title>@yield('title')</title>
+
+    @yield('head-extra')
 </head>
 
 <body class="flex min-h-screen flex-col bg-slate-950 font-sans text-slate-200 antialiased">
@@ -21,6 +23,9 @@
                         href="/about">About Us</a></li>
                 <li><a class="text-slate-300 hover:text-white focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-slate-400"
                         href="/contact">Contact</a></li>
+                <li><a class="text-slate-300 hover:text-white focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-slate-400"
+                        href="/signin">Sign
+                        In</a></li>
             </ul>
         </nav>
     </header>

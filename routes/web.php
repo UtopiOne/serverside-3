@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MainController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
@@ -24,3 +25,6 @@ Route::get('/contact', function () {
 
     return view('contacts', ['contacts' => $contacts]);
 });
+
+Route::get("/signin", [AuthController::class, 'create']);
+Route::post('/signin', [AuthController::class, 'registration']);
