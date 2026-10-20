@@ -25,4 +25,6 @@
             </article>
         @endforeach
     </div>
+
+    <div class="flex flex-col min-w-0 gap-3 p-6">{{ $articles->links() }}</div>
 @endsection
