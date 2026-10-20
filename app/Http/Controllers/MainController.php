@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Article;
 use Illuminate\Http\Request;
 
 class MainController extends Controller
 {
     function index()
     {
-        $json = file_get_contents(public_path('articles.json'));
-        $articles = json_decode($json, true);
+        $articles = Article::orderBy('published_at')->paginate(6);
 
         return view('index', ['articles' => $articles]);
     }
