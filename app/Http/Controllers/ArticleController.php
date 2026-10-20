@@ -46,7 +46,7 @@ class ArticleController extends Controller
         return redirect()->route('articles.show', $article);
     }
 
-    public function update(Request $request): RedirectResponse
+    public function update(Request $request, Article $article): RedirectResponse
     {
         $data = $request->validate([
             'published_at' => ['required', 'date'],
@@ -57,7 +57,7 @@ class ArticleController extends Controller
             'description' => ['required', 'string'],
         ]);
 
-        $article = Article::update($data);
+        $article->update($data);
 
         return redirect()->route('articles.show', $article);
     }

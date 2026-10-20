@@ -43,6 +43,10 @@
                 @enderror
             </div>
 
+            <div>
+                <p>Уже есть аккаунт? <span><a href="login">Войти.</a></span></p>
+            </div>
+
             <button type="submit"
                 class="w-full cursor-pointer rounded-lg bg-slate-200 px-4 py-3 text-sm font-semibold text-slate-950 hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-slate-400 active:bg-slate-300">
                 Зарегистрироваться

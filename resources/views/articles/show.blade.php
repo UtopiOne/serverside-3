@@ -22,7 +22,7 @@
     </nav>
 
     <article class="overflow-hidden rounded-2xl border border-slate-800 bg-slate-900 shadow-xl shadow-black/20">
-        <header class="mx-auto max-w-3xl break-words p-6 sm:p-10">
+        <header class="mx-auto max-w-3xl wrap-break-word p-6 sm:p-10">
             <time datetime="{{ $article->published_at->format('Y-m-d') }}"
                 class="text-sm text-slate-400">{{ $article->published_at->format('d.m.Y') }}</time>
             <h1 class="mt-4">{{ $article->title }}</h1>
@@ -31,7 +31,7 @@
         <img src="{{ asset($article->full_image) }}" alt="{{ $article->title }}"
             class="max-h-128 w-full object-contain bg-slate-950">
         <div class="mx-auto max-w-3xl p-6 sm:p-10">
-            <div class="whitespace-pre-wrap break-words text-base leading-8 text-slate-200">{{ $article->description }}
+            <div class="whitespace-pre-wrap wrap-break-word text-base leading-8 text-slate-200">{{ $article->description }}
             </div>
         </div>
     </article>

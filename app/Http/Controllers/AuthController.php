@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\JsonResponse;
+use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -12,7 +14,30 @@ class AuthController extends Controller
         return view('auth.signin');
     }
 
-    public function registration(Request $request): JsonResponse
+    public function registration(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255', 'unique:users,email'],
+            'password' => ['required', 'string', 'min:8'],
+        ], [
+            'email.unique' => 'User with this email already exists',
+        ]);
+
+        $user = User::create($data);
+
+        Auth::login($user);
+        $request->session()->regenerate();
+
+        return redirect()->route('articles.index');
+    }
+
+    public function login()
+    {
+        return view('auth.login');
+    }
+
+    public function authenticate(Request $request): RedirectResponse
     {
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
@@ -20,6 +45,25 @@ class AuthController extends Controller
             'password' => ['required', 'string', 'min:8'],
         ]);
 
-        return response()->json($data);
+        if (Auth::attempt($data)) {
+            $request->session()->regenerate();
+
+            return redirect()->route('articles.index');
+        }
+
+        return back()->withErrors([
+            'email' => 'The provided credentials do not match our records.',
+        ])->onlyInput('email');
+    }
+
+    public function logout(Request $request): RedirectResponse
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        return redirect('/');
     }
 }

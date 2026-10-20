@@ -23,9 +23,20 @@
                         href="/about">About Us</a></li>
                 <li><a class="text-slate-300 hover:text-white focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-slate-400"
                         href="/contact">Contact</a></li>
-                <li><a class="text-slate-300 hover:text-white focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-slate-400"
-                        href="/signin">Sign
-                        In</a></li>
+
+                @auth
+                    <li><span class="text-slate-300">{{ auth()->user()->name }}</span></li>
+                    <form action="{{ route('logout') }}" method="POST">
+                        @csrf
+
+                        <button type="submit" class="cursor-pointer text-sm text-slate-200 hover:text-white">Log
+                            out</button>
+                    </form>
+                @else
+                    <li><a class="text-slate-300 hover:text-white focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-slate-400"
+                            href="/signin">Sign
+                            In</a></li>
+                @endauth
             </ul>
         </nav>
     </header>

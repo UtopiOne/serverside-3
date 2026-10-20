@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 
 Route::get('/', [MainController::class, 'index']);
 
-Route::resource('articles', ArticleController::class);
+Route::resource('articles', ArticleController::class)->middleware('auth:sanctum');
 
 Route::get('/about', function () {
     return view('about');
@@ -31,3 +31,8 @@ Route::get('/contact', function () {
 
 Route::get("/signin", [AuthController::class, 'create']);
 Route::post('/signin', [AuthController::class, 'registration']);
+
+Route::get('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/login', [AuthController::class, 'authenticate']);
+
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
