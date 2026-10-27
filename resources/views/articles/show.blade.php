@@ -29,6 +29,7 @@
         <header class="mx-auto max-w-3xl wrap-break-word p-6 sm:p-10">
             <time datetime="{{ $article->published_at->format('Y-m-d') }}"
                 class="text-sm text-slate-400">{{ $article->published_at->format('d.m.Y') }}</time>
+            <p class="text-sm text-slate-400">Автор: {{ $article->author?->name ?? 'Автор не указан' }}</p>
             <h1 class="mt-4">{{ $article->title }}</h1>
             <p class="whitespace-pre-line text-lg leading-8 text-slate-300">{{ $article->brief_description }}</p>
         </header>

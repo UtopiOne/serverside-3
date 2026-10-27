@@ -29,6 +29,7 @@
                     <div class="flex min-w-0 flex-col gap-3 p-6">
                         <time datetime="{{ $article->published_at->format('Y-m-d') }}"
                             class="text-xs font-medium tracking-wide text-slate-400">{{ $article->published_at->format('d.m.Y') }}</time>
+                        <p class="text-sm text-slate-400">Автор: {{ $article->author?->name ?? 'Автор не указан' }}
                         <h2 class="break-words text-xl font-semibold leading-snug text-white">
                             <a href="{{ route('articles.show', $article) }}"
                                 class="hover:text-slate-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-slate-400">{{ $article->title }}</a>

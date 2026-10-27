@@ -48,7 +48,9 @@ class ArticleController extends Controller
             'description' => ['required', 'string'],
         ]);
 
-        $article = Article::create($data);
+        $article = new Article($data);
+        $article->author()->associate($request->user());
+        $article->save();
         Mail::to($request->user()->email)->send(new ArticlePosted($article));
 
         return redirect()->route('articles.show', $article);

@@ -48,7 +48,7 @@ class CommentPolicy
      */
     public function delete(User $user, Comment $comment): bool
     {
-        return $user->role?->name === 'moderator';
+        return $user->role?->name === 'moderator' || $comment->user?->is($user) ?? false;
     }
 
     /**
