@@ -9,15 +9,19 @@
             class="text-sm text-slate-400 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-slate-400">←
             Все статьи</a>
         <div class="flex flex-wrap items-center gap-3">
-            <a href="{{ route('articles.edit', $article) }}"
-                class="rounded-lg bg-slate-200 px-4 py-2 text-sm font-semibold text-slate-950 hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-slate-400">Редактировать</a>
-            <form action="{{ route('articles.destroy', $article) }}" method="POST"
-                onsubmit="return confirm('Удалить статью? Это действие нельзя отменить.');">
-                @csrf
-                @method('DELETE')
-                <button type="submit"
-                    class="cursor-pointer rounded-lg border border-red-400/30 px-4 py-2 text-sm text-red-300 hover:bg-red-400/10 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-red-400">Удалить</button>
-            </form>
+            @can('update', $article)
+                <a href="{{ route('articles.edit', $article) }}"
+                    class="rounded-lg bg-slate-200 px-4 py-2 text-sm font-semibold text-slate-950 hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-slate-400">Редактировать</a>
+            @endcan
+            @can('delete', $article)
+                <form action="{{ route('articles.destroy', $article) }}" method="POST"
+                    onsubmit="return confirm('Удалить статью? Это действие нельзя отменить.');">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit"
+                        class="cursor-pointer rounded-lg border border-red-400/30 px-4 py-2 text-sm text-red-300 hover:bg-red-400/10 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-red-400">Удалить</button>
+                </form>
+            @endcan
         </div>
     </nav>
 

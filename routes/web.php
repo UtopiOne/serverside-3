@@ -5,11 +5,17 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MainController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
+use App\Models\Article;
 
 
 Route::get('/', [MainController::class, 'index']);
 
-Route::resource('articles', ArticleController::class)->middleware('auth:sanctum');
+Route::resource('articles', ArticleController::class)->middleware('auth:sanctum')
+    ->middlewareFor('index', 'can:viewAny,' . Article::class)
+    ->middlewareFor('show', 'can:view,article')
+    ->middlewareFor(['create', 'store'], 'can:create,' . Article::class)
+    ->middlewareFor(['edit', 'update'], 'can:update,article')
+    ->middlewareFor('destroy', 'can:delete,article');
 
 Route::get('/about', function () {
     return view('about');

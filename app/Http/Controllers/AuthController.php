@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Roles;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -24,7 +25,12 @@ class AuthController extends Controller
             'email.unique' => 'User with this email already exists',
         ]);
 
-        $user = User::create($data);
+        $user = new User($data);
+        $user->role()->associate(
+            Roles::where('name', 'reader')->firstOrFail()
+        );
+
+        $user->save();
 
         Auth::login($user);
         $request->session()->regenerate();
