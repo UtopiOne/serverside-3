@@ -34,8 +34,10 @@
                                 class="hover:text-slate-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-slate-400">{{ $article->title }}</a>
                         </h2>
                         <p class="break-words text-sm leading-7 text-slate-400">{{ $article->brief_description }}</p>
-                        <a href="{{ route('articles.edit', $article) }}"
-                            class="self-start rounded-lg border border-slate-700 px-4 py-2 text-sm text-slate-300 hover:bg-slate-800 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-slate-400">Редактировать</a>
+                        @can('update', $article)
+                            <a href="{{ route('articles.edit', $article) }}"
+                                class="self-start rounded-lg border border-slate-700 px-4 py-2 text-sm text-slate-300 hover:bg-slate-800 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-slate-400">Редактировать</a>
+                        @endcan
                     </div>
                 </div>
             </article>

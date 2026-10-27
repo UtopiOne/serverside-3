@@ -36,4 +36,13 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Roles::class, 'role_id');
     }
+
+    // Don't use in app
+    public function assignRole(string $roleName): void
+    {
+        $role = Roles::where('name', $roleName)->firstOrFail();
+
+        $this->role()->associate($role);
+        $this->save();
+    }
 }
