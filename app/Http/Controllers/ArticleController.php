@@ -14,17 +14,22 @@ class ArticleController extends Controller
     public function index(): View
     {
         $articles = Article::orderBy('published_at')->paginate(6);
-        return view("index", ['articles' => $articles]);
+
+        return view('index', ['articles' => $articles]);
     }
 
     public function create(): View
     {
-        return view("articles.create");
+        return view('articles.create');
     }
 
     public function show(Article $article): View
     {
-        return view('articles.show', ['article' => $article]);
+        $comments = $article->comments()->with('user')
+            ->latest('published_at')->orderByDesc('id')
+            ->paginate(10, ['*'], 'comments_page')->fragment('comments');
+
+        return view('articles.show', ['article' => $article, 'comments' => $comments]);
     }
 
     public function edit(Article $article): View

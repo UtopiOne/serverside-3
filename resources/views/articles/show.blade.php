@@ -39,4 +39,6 @@
             </div>
         </div>
     </article>
+
+    @include('articles._comments')
 @endsection

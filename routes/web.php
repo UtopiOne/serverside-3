@@ -2,20 +2,25 @@
 
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\MainController;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Http\Request;
 use App\Models\Article;
-
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', [MainController::class, 'index']);
 
 Route::resource('articles', ArticleController::class)->middleware('auth:sanctum')
-    ->middlewareFor('index', 'can:viewAny,' . Article::class)
+    ->middlewareFor('index', 'can:viewAny,'.Article::class)
     ->middlewareFor('show', 'can:view,article')
-    ->middlewareFor(['create', 'store'], 'can:create,' . Article::class)
+    ->middlewareFor(['create', 'store'], 'can:create,'.Article::class)
     ->middlewareFor(['edit', 'update'], 'can:update,article')
     ->middlewareFor('destroy', 'can:delete,article');
+
+Route::resource('article.comments', CommentController::class)
+    ->only(['store', 'update', 'destroy'])
+    ->scoped()
+    ->middleware('auth:sanctum');
 
 Route::get('/about', function () {
     return view('about');
@@ -35,7 +40,7 @@ Route::get('/contact', function () {
     return view('contacts', ['contacts' => $contacts]);
 });
 
-Route::get("/signin", [AuthController::class, 'create']);
+Route::get('/signin', [AuthController::class, 'create']);
 Route::post('/signin', [AuthController::class, 'registration']);
 
 Route::get('/login', [AuthController::class, 'login'])->name('login');
