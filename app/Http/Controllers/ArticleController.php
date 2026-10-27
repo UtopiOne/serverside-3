@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ArticlePosted;
 use App\Models\Article;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 
 class ArticleController extends Controller
@@ -42,6 +44,7 @@ class ArticleController extends Controller
         ]);
 
         $article = Article::create($data);
+        Mail::to($request->user()->email)->send(new ArticlePosted($article));
 
         return redirect()->route('articles.show', $article);
     }

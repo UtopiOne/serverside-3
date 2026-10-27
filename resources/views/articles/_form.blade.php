@@ -43,7 +43,6 @@
                 <span id="description-error" class="text-sm text-red-400">{{ $message }}</span>
             @enderror
         </div>
-        <span class="text-xs text-slate-400">Обычный текст. Переносы строк сохранятся при просмотре.</span>
     </section>
 
     <aside class="flex min-w-0 flex-col gap-6 rounded-2xl border border-slate-800 bg-slate-900 p-6"
