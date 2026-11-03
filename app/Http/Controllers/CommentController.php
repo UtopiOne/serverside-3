@@ -7,15 +7,22 @@ use App\Models\Comment;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\View\View;
 
 class CommentController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): View
     {
-        //
+        $comments = Comment::where('approved', false)
+            ->with(['user', 'article'])
+            ->orderBy('created_at')
+            ->orderBy('id')
+            ->paginate(10);
+
+        return view('moderation.comments', ['comments' => $comments]);
     }
 
     /**
@@ -78,6 +85,27 @@ class CommentController extends Controller
         $comment->update($data);
 
         return redirect()->to(route('articles.show', $article).'#comments');
+    }
+
+    public function approve(Comment $comment): RedirectResponse
+    {
+        Gate::authorize('approve', $comment);
+
+        $comment->approved = true;
+        $comment->save();
+
+        return redirect()->route('moderation.comments.index');
+    }
+
+    public function destroyPending(Comment $comment): RedirectResponse
+    {
+        Gate::authorize('viewAny', Comment::class);
+        Gate::authorize('delete', $comment);
+        abort_if($comment->approved, 404);
+
+        $comment->delete();
+
+        return redirect()->route('moderation.comments.index');
     }
 
     /**

@@ -12,7 +12,7 @@ class CommentPolicy
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return $user->role?->name === 'moderator';
     }
 
     /**
@@ -41,6 +41,11 @@ class CommentPolicy
     public function update(User $user, Comment $comment): bool
     {
         return $comment->user?->is($user) ?? false;
+    }
+
+    public function approve(User $user, Comment $comment): bool
+    {
+        return $user->role?->name === 'moderator';
     }
 
     /**

@@ -18,8 +18,9 @@ beforeEach(function (): void {
 test('article pages show only their comments and escape comment text', function (): void {
     Comment::factory()->for($this->article)->for($this->reader)->create([
         'contents' => '<script>alert("comment")</script>',
+        'approved' => true,
     ]);
-    Comment::factory()->create(['contents' => 'Comment on another article']);
+    Comment::factory()->create(['contents' => 'Comment on another article', 'approved' => true]);
 
     $this->actingAs($this->reader)->get(route('articles.show', $this->article))
         ->assertOk()
@@ -79,7 +80,7 @@ test('authors can edit their comments but other readers cannot', function (): vo
 });
 
 test('only moderators can delete comments', function (): void {
-    $comment = Comment::factory()->for($this->article)->for($this->reader)->create();
+    $comment = Comment::factory()->for($this->article)->for($this->reader)->create(['approved' => true]);
     $url = route('article.comments.destroy', [$this->article, $comment]);
     $this->actingAs($this->reader)->delete($url)->assertForbidden();
 
@@ -106,7 +107,7 @@ test('guests cannot post comments', function (): void {
 });
 
 test('comments are paginated on the article page', function (): void {
-    Comment::factory()->count(11)->for($this->article)->for($this->reader)->create();
+    Comment::factory()->count(11)->for($this->article)->for($this->reader)->create(['approved' => true]);
 
     $this->actingAs($this->reader)->get(route('articles.show', $this->article))
         ->assertOk()
@@ -119,8 +120,8 @@ test('comments are paginated on the article page', function (): void {
 });
 
 test('edit validation preserves input only in the failing comment form', function (): void {
-    $comment = Comment::factory()->for($this->article)->for($this->reader)->create();
-    $other = Comment::factory()->for($this->article)->for($this->reader)->create();
+    $comment = Comment::factory()->for($this->article)->for($this->reader)->create(['approved' => true]);
+    $other = Comment::factory()->for($this->article)->for($this->reader)->create(['approved' => true]);
     $invalid = str_repeat('x', 1024);
 
     $this->actingAs($this->reader)->followingRedirects()

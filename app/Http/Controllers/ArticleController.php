@@ -25,7 +25,8 @@ class ArticleController extends Controller
 
     public function show(Article $article): View
     {
-        $comments = $article->comments()->with('user')
+        $comments = $article->comments()->where('approved', true)
+            ->with('user')
             ->latest('published_at')->orderByDesc('id')
             ->paginate(10, ['*'], 'comments_page')->fragment('comments');
 

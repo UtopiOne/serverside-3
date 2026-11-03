@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\MainController;
 use App\Models\Article;
+use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,6 +22,18 @@ Route::resource('article.comments', CommentController::class)
     ->only(['store', 'update', 'destroy'])
     ->scoped()
     ->middleware('auth:sanctum');
+
+Route::get('/moderation/comments', [CommentController::class, 'index'])
+    ->middleware(['auth:sanctum', 'can:viewAny,'.Comment::class])
+    ->name('moderation.comments.index');
+
+Route::patch('/moderation/comments/{comment}/approve', [CommentController::class, 'approve'])
+    ->middleware('auth:sanctum')
+    ->name('moderation.comments.approve');
+
+Route::delete('/moderation/comments/{comment}', [CommentController::class, 'destroyPending'])
+    ->middleware('auth:sanctum')
+    ->name('moderation.comments.destroy');
 
 Route::get('/about', function () {
     return view('about');

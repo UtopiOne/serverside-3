@@ -24,6 +24,11 @@
                 <li><a class="text-slate-300 hover:text-white focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-slate-400"
                         href="/contact">Contact</a></li>
 
+                @can('viewAny', \App\Models\Comment::class)
+                    <li><a class="text-slate-300 hover:text-white focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-slate-400"
+                            href="{{ route('moderation.comments.index') }}">Moderation</a></li>
+                @endcan
+
                 @auth
                     <li><span class="text-slate-300">{{ auth()->user()->name }}</span></li>
                     <form action="{{ route('logout') }}" method="POST">
