@@ -38,6 +38,42 @@ test('article pages show an empty comments state', function (): void {
         ->assertOk()->assertSee('Комментариев пока нет.');
 });
 
+test('readers see a moderation sign only on their own pending comments', function (): void {
+    $otherReader = User::factory()->create(['role_id' => $this->reader->role_id]);
+    $otherArticle = Article::factory()->create();
+
+    $ownPending = Comment::factory()->for($this->article)->for($this->reader)
+        ->create(['contents' => 'My pending comment']);
+    Comment::factory()->for($this->article)->for($otherReader)
+        ->create(['contents' => 'Someone else pending']);
+    Comment::factory()->for($this->article)->for($otherReader)
+        ->create(['contents' => 'Approved comment', 'approved' => true]);
+    Comment::factory()->for($otherArticle)->for($this->reader)
+        ->create(['contents' => 'Pending on another article']);
+
+    $this->actingAs($this->reader)->get(route('articles.show', $this->article))
+        ->assertOk()
+        ->assertSee('My pending comment')
+        ->assertSee('Ожидает модерации')
+        ->assertSee('Approved comment')
+        ->assertDontSee('Someone else pending')
+        ->assertDontSee('Pending on another article')
+        ->assertViewHas('comments', fn ($comments): bool => $comments->total() === 2);
+
+    $this->actingAs($otherReader)->get(route('articles.show', $this->article))
+        ->assertOk()
+        ->assertSee('Someone else pending')
+        ->assertDontSee('My pending comment');
+
+    $ownPending->approved = true;
+    $ownPending->save();
+
+    $this->actingAs($this->reader)->get(route('articles.show', $this->article))
+        ->assertOk()
+        ->assertSee('My pending comment')
+        ->assertDontSee('Ожидает модерации');
+});
+
 test('readers can post comments with server assigned ownership', function (): void {
     $other = User::factory()->create();
 

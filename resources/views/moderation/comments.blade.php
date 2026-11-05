@@ -41,8 +41,7 @@
                 </div>
             </article>
         @empty
-            <p class="rounded-2xl border border-dashed border-slate-800 p-6 text-center text-sm text-slate-400">Нет
-                комментариев на проверке.</p>
+            <p class="rounded-2xl border border-dashed border-slate-800 p-6 text-center text-sm text-slate-400">Нет комментариев на проверке.</p>
         @endforelse
     </div>
 

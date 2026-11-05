@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\ArticlePosted;
 use App\Models\Article;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -23,9 +24,13 @@ class ArticleController extends Controller
         return view('articles.create');
     }
 
-    public function show(Article $article): View
+    public function show(Request $request, Article $article): View
     {
-        $comments = $article->comments()->where('approved', true)
+        $comments = $article->comments()
+            ->where(function (Builder $query) use ($request): void {
+                $query->where('approved', true)
+                    ->orWhere('user_id', $request->user()?->getAuthIdentifier());
+            })
             ->with('user')
             ->latest('published_at')->orderByDesc('id')
             ->paginate(10, ['*'], 'comments_page')->fragment('comments');

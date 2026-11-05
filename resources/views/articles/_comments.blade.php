@@ -30,7 +30,12 @@
             <article id="comment-{{ $comment->id }}"
                 class="min-w-0 rounded-2xl border border-slate-800 bg-slate-900 p-6 sm:p-8">
                 <header class="mb-4 flex flex-wrap items-center justify-between gap-2">
-                    <span class="wrap-break-word font-semibold text-slate-200">{{ $comment->user?->name ?? 'Пользователь удалён' }}</span>
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span class="wrap-break-word font-semibold text-slate-200">{{ $comment->user?->name ?? 'Пользователь удалён' }}</span>
+                        @unless ($comment->approved)
+                            <span class="rounded-full border border-amber-500/30 bg-amber-500/10 px-2.5 py-1 text-xs font-medium text-amber-200">Ожидает модерации</span>
+                        @endunless
+                    </div>
                     <time datetime="{{ $comment->published_at->toIso8601String() }}"
                         class="text-xs text-slate-400">{{ $comment->published_at->format('d.m.Y H:i') }}</time>
                 </header>
