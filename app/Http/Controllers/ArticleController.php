@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\VeryLongJob;
 use App\Mail\ArticlePosted;
 use App\Models\Article;
 use Illuminate\Database\Eloquent\Builder;
@@ -57,7 +58,8 @@ class ArticleController extends Controller
         $article = new Article($data);
         $article->author()->associate($request->user());
         $article->save();
-        Mail::to($request->user()->email)->send(new ArticlePosted($article));
+        // Mail::to($request->user()->email)->send(new ArticlePosted($article));
+        VeryLongJob::dispatch($article, $request->user()->email);
 
         return redirect()->route('articles.show', $article);
     }
