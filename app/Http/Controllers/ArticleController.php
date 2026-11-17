@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NewArticleEvent;
 use App\Jobs\VeryLongJob;
 use App\Mail\ArticlePosted;
 use App\Models\Article;
@@ -58,6 +59,7 @@ class ArticleController extends Controller
         $article = new Article($data);
         $article->author()->associate($request->user());
         $article->save();
+        NewArticleEvent::dispatch($article);
         // Mail::to($request->user()->email)->send(new ArticlePosted($article));
         VeryLongJob::dispatch($article, $request->user()->email);
 

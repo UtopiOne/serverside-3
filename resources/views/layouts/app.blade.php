@@ -4,8 +4,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    @vite('resources/css/app.css')
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <title>@yield('title')</title>
 
@@ -13,6 +14,13 @@
 </head>
 
 <body class="flex min-h-screen flex-col bg-slate-950 font-sans text-slate-200 antialiased">
+    @if (config('broadcasting.default') === 'pusher')
+        @can('viewAny', \App\Models\Article::class)
+            <div id="article-notifications"
+                data-pusher-key="{{ config('broadcasting.connections.pusher.key') }}"
+                data-pusher-cluster="{{ config('broadcasting.connections.pusher.options.cluster') }}"></div>
+        @endcan
+    @endif
     <header class="border-b border-slate-800 bg-slate-900">
 
         <nav class="mx-auto max-w-3xl px-6 py-4" aria-label="Main navigation">

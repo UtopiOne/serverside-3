@@ -16,6 +16,31 @@ services:
       - ./resources:/app/resources:ro
       - ./public/articles.json:/app/storage/app/public/articles.json:ro
       - ./public/build:/app/public/build:ro
+    healthcheck:
+      test: ["CMD", "php", "-r", "exit(@file_get_contents('http://127.0.0.1:8000/up') === false ? 1 : 0);"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 30s
+
+  worker:
+    build: .
+    env_file:
+      - .env
+    environment:
+      APP_URL: http://localhost:8000
+      DB_CONNECTION: sqlite
+      DB_DATABASE: /app/storage/database.sqlite
+    volumes:
+      - laravel_storage:/app/storage
+      - ./app:/app/app:ro
+      - ./routes:/app/routes:ro
+      - ./resources:/app/resources:ro
+    command: php artisan queue:work database --sleep=1 --tries=3 --timeout=60
+    depends_on:
+      app:
+        condition: service_healthy
+    restart: unless-stopped
 
 volumes:
   laravel_storage:
