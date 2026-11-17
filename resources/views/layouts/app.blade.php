@@ -39,6 +39,26 @@
 
                 @auth
                     <li><span class="text-slate-300">{{ auth()->user()->name }}</span></li>
+                    @can('viewAny', \App\Models\Article::class)
+                        <li>
+                            <details class="relative">
+                                <summary class="cursor-pointer list-none text-slate-300 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-slate-400">
+                                    Уведомления
+                                    <span class="rounded-full bg-slate-700 px-2 py-0.5 text-xs text-white">{{ $unreadArticleNotifications->count() }}</span>
+                                </summary>
+                                <div class="absolute right-0 top-full z-50 mt-2 max-h-80 w-80 max-w-[calc(100vw-2rem)] overflow-y-auto rounded-lg border border-slate-700 bg-slate-900 p-2 shadow-xl shadow-black/40">
+                                    @forelse ($unreadArticleNotifications as $notification)
+                                        <a href="{{ route('articles.show', $notification->data['article_id']) }}"
+                                            class="block rounded-md px-3 py-2 text-sm text-slate-200 hover:bg-slate-800 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-slate-400">
+                                            {{ $notification->data['article_title'] }}
+                                        </a>
+                                    @empty
+                                        <p class="px-3 py-2 text-sm text-slate-400">Непрочитанных уведомлений нет.</p>
+                                    @endforelse
+                                </div>
+                            </details>
+                        </li>
+                    @endcan
                     <form action="{{ route('logout') }}" method="POST">
                         @csrf
 

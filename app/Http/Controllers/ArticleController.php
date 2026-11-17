@@ -6,10 +6,14 @@ use App\Events\NewArticleEvent;
 use App\Jobs\VeryLongJob;
 use App\Mail\ArticlePosted;
 use App\Models\Article;
+use App\Models\User;
+use App\Notifications\ArticlePostedNotification;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\View\View;
 
 class ArticleController extends Controller
@@ -28,6 +32,11 @@ class ArticleController extends Controller
 
     public function show(Request $request, Article $article): View
     {
+        $request->user()->unreadNotifications()
+            ->where('type', ArticlePostedNotification::class)
+            ->where('data->article_id', $article->id)
+            ->update(['read_at' => now()]);
+
         $comments = $article->comments()
             ->where(function (Builder $query) use ($request): void {
                 $query->where('approved', true)
@@ -59,6 +68,11 @@ class ArticleController extends Controller
         $article = new Article($data);
         $article->author()->associate($request->user());
         $article->save();
+        User::whereHas('role', function (Builder $query): void {
+            $query->whereIn('name', ['reader', 'moderator']);
+        })->chunkById(100, function (Collection $users) use ($article): void {
+            Notification::send($users, new ArticlePostedNotification($article));
+        });
         NewArticleEvent::dispatch($article);
         // Mail::to($request->user()->email)->send(new ArticlePosted($article));
         VeryLongJob::dispatch($article, $request->user()->email);
