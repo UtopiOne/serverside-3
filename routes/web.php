@@ -13,8 +13,7 @@ Route::get('/', [MainController::class, 'index']);
 
 Route::resource('articles', ArticleController::class)->middleware('auth:sanctum')
     ->middlewareFor('index', 'can:viewAny,'.Article::class)
-    ->middlewareFor('show', 'can:view,article')
-    ->middlewareFor('show', 'record.article.view')
+    ->middlewareFor('show', ['can:view,article', 'record.article.view'])
     ->middlewareFor(['create', 'store'], 'can:create,'.Article::class)
     ->middlewareFor(['edit', 'update'], 'can:update,article')
     ->middlewareFor('destroy', 'can:delete,article');
